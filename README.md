@@ -216,10 +216,17 @@ Puis dans modelsim :
 > run 2us
 
 12. Analysez les signaux : 
-    1. Quels sont ceux générés par le testbench ? 
-    2. Quels sont les signaux de sortie de composant ? 
-    3. Quels signaux ne sont pas générés par le testbench mais devraient l'être ?
-    4. Au bout de combien de temps le signal _reset_ passe-t-il à 1 ?
+    1. Quels sont ceux générés par le testbench ?
+       clk_clk et reset_reset_n
+    3. Quels sont les signaux de sortie de composant ?
+       readata et externalconnection
+    5. Quels signaux ne sont pas générés par le testbench mais devraient l'être ?
+       • pio_0_s1_address (Adresse du registre)
+       • pio_0_s1_write_n (Ordre d'écriture, actif bas)
+       • pio_0_s1_writedata (Données à écrire)
+       • pio_0_s1_chipselect
+    7. Au bout de combien de temps le signal _reset_ passe-t-il à 1 ?
+       dès le début à t=0s
 
 13. Ouvrir le fichier ```pio_sim_tb.vhd``` dans le dossier ```pio_sim/testbench/pio_sim_tb/simulation/```
 
@@ -256,6 +263,26 @@ Puis dans modelsim :
     2. Les 8 bits suivants soient des entrées permettant de générer des interruptions. Testez. 
     3. Les 8 bits de poids fort soient des entrées ne générant pas d'interruption. Testez également.
     4. Les 3 points ci-dessus doivent fonctionner en parallèle.
+
+    1. sont des sorties : on envoie un état haute impédance Z pour la zimulation
+     On accède au regustre de direction en 001
+     On y écrit des 1 sur des nbits de poids faibles pour déf ces lignes en tant que sortie et des 0 pour dles définir en tant qu'entrée.
+  
+     '
+       adresse<= "001"
+       write_n <= '0' -- enable writing
+       write data <= x"0000FFFF" --1 for output
+       chipselect à 1 
+     '
+       juuste uen lecture du registre 000 pour vérifier son contenu
+
+
+
+
+
+
+
+
 
 ## Séance 2 : Créer un périphérique
 
